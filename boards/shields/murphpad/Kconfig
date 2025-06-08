@@ -1,0 +1,2 @@
+config murphpad
+    bool "murphpad"
