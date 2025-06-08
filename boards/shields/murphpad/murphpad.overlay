@@ -1,24 +1,24 @@
-/ {
-    matrix {
-        compatible = "zmk,matrix-transform";
-        row-gpios = <&gpio0 6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-                    <&gpio0 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-                    <&gpio0 17 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-                    <&gpio0 20 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-                    <&gpio0 22 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-        col-gpios = <&gpio1 15 GPIO_ACTIVE_LOW>,
-                    <&gpio0 31 GPIO_ACTIVE_LOW>,
-                    <&gpio0 29 GPIO_ACTIVE_LOW>,
-                    <&gpio0 2 GPIO_ACTIVE_LOW>;
-        diode-direction = "COL2ROW";
-    };
+/ { kscan: kscan { compatible = "zmk,kscan-gpio-matrix"; wakeup-source; diode-direction = "col2row"; row-gpios = < &pro_micro 0x14 0x20 >, < &pro_micro 0x10 0x20 >, < &pro_micro 0xe 0x20 >, < &pro_micro 0xf 0x20 >, < &pro_micro 0x12 0x20 >, < &pro_micro 0x13 0x20 >; col-gpios = < &pro_micro 0x9 0x0 >, < &pro_micro 0x6 0x0 >, < &pro_micro 0x5 0x0 >, < &pro_micro 0x4 0x0 >, < &pro_micro 0xa 0x0 >; };
 
-    reset_button: reset_button_0 {
-        gpios = <&gpio0 24 GPIO_ACTIVE_LOW>;
-        label = "Reset Button";
-    };
-};
+     middle_left_encoder: encoder_1 {
+         compatible = "alps,ec11";
+         a-gpios = < &pro_micro 0x8 0x11 >;
+         b-gpios = < &pro_micro 0x7 0x11 >;
+         steps = < 0x50 >;
+         status = "okay";
+     };
 
-&zmk {
-    reset-button = &reset_button;
-};
+     top_right_encoder: encoder_2 {
+         compatible = "alps,ec11";
+         a-gpios = < &pro_micro 0x1 0x11 >;
+         b-gpios = < &pro_micro 0x0 0x11 >;
+         steps = < 0x50 >;
+         status = "okay";
+     };
+
+     sensors: sensors {
+         compatible = "zmk,keymap-sensors";
+         sensors = < &middle_left_encoder &top_right_encoder >;
+         triggers-per-rotation = < 0x14 >;
+     };
+ };
