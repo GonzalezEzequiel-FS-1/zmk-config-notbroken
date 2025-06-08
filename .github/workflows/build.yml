@@ -1,41 +1,7 @@
 name: Build ZMK firmware
-
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        board: [nice_nano_v2] # replace with your board
-        shield: [zboard] # replace with your shield
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y git cmake ninja-build gperf \
-            ccache dfu-util device-tree-compiler wget \
-            python3-dev python3-pip python3-setuptools python3-wheel xz-utils file
-          pip3 install west
-
-      - name: Initialize West and update
-        run: |
-          west init -l config
-          west update
-          west zephyr-export
-          pip3 install -r zmk/app/requirements.txt
-
-      - name: Build firmware with USB enabled
-        run: |
-          west build -s zmk/app -b ${{ matrix.board }} \
-            -- -DSHIELD=${{ matrix.shield }} -DUSB_ENABLE=y
-
-      - name: Upload firmware artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: firmware-${{ matrix.board }}-${{ matrix.shield }}
-          path: build/zephyr/zmk.uf2
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    
